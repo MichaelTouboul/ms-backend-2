@@ -12,7 +12,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "echo \"Use: npm -w <workspace> run dev\"",
+    "dev": "bash scripts/dev-all.sh",
     "build": "echo \"Use: npm -w <workspace> run build\"",
     "lint": "echo \"Use: npm -w <workspace> run lint\""
   },

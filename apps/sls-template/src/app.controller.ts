@@ -8,6 +8,6 @@ export class AppController {
 
   @Get('health')
   health() {
-    return { ok: true };
+    return { ok: true, nodemon: 'ok' };
   }
 }
