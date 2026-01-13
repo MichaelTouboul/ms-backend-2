@@ -1,0 +1,35 @@
+service: sls-template
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-west-1
+  stage: dev
+  timeout: 29
+
+plugins:
+  - serverless-offline
+
+functions:
+  api:
+    handler: src/lambda.handler
+    events:
+      - httpApi: '*'
+
+custom:
+  serverless-offline:
+    httpPort: 4001
+
+build:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    platform: node
+    target: node20
+    external:
+      - aws-sdk
+      - '@nestjs/microservices'
+      - '@nestjs/microservices/microservices-module'
+      - '@nestjs/websockets'
+      - '@nestjs/websockets/socket-module'
