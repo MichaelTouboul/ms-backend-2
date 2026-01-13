@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: eu-west-1
-  stage: dev
+  stage: ${opt:stage, 'dev'}
   timeout: 29
 
 plugins:
@@ -20,11 +20,19 @@ custom:
   serverless-offline:
     httpPort: 4001
 
+  buildConfig:
+    dev:
+      sourcemap: true
+      minify: false
+    prod:
+      sourcemap: false
+      minify: true
+
 build:
   esbuild:
     bundle: true
-    minify: false
-    sourcemap: true
+    sourcemap: ${self:custom.buildConfig.${self:provider.stage}.sourcemap}
+    minify: ${self:custom.buildConfig.${self:provider.stage}.minify}
     platform: node
     target: node20
     external:

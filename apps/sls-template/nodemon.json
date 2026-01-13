@@ -2,6 +2,6 @@
   "watch": ["src"],
   "ext": "ts,json,yml",
   "ignore": ["dist", ".serverless"],
-  "exec": "serverless offline",
+  "exec": "serverless offline --stage dev",
   "signal": "SIGTERM"
 }
