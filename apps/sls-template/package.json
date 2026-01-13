@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon",
     "dev:once": "serverless offline",
-    "deploy": "serverless deploy",
-    "remove": "serverless remove"
+    "deploy:prod": "serverless deploy --stage prod",
+    "deploy:dev": "serverless deploy --stage dev"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.11",
