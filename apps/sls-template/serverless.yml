@@ -6,6 +6,8 @@ provider:
   region: eu-west-1
   stage: ${opt:stage, 'dev'}
   timeout: 29
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
 
 plugins:
   - serverless-offline
