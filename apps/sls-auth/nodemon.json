@@ -1,0 +1,7 @@
+{
+  "watch": ["src"],
+  "ext": "ts,json,yml",
+  "ignore": ["dist", ".serverless"],
+  "exec": "dotenv -e .env.local -- serverless offline --stage dev",
+  "signal": "SIGTERM"
+}

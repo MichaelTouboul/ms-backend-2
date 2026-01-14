@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SERVICE="${1:-}"
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-# Find all services in /apps
+if [[ -n "$SERVICE" ]]; then
+  APP_DIR="apps/$SERVICE"
+
+  if [[ ! -d "$APP_DIR" ]]; then
+    echo "❌ Service '$SERVICE' not found in apps/"
+    exit 1
+  fi
+
+  echo "▶ Starting service: $SERVICE"
+  npm -w "$APP_DIR" run dev
+  exit 0
+fi
+
+echo "▶ Starting ALL services"
+
 SERVICES=()
 for dir in apps/*; do
   if [[ -f "$dir/package.json" ]]; then
@@ -13,40 +28,23 @@ for dir in apps/*; do
   fi
 done
 
-if [[ ${#SERVICES[@]} -eq 0 ]]; then
-  echo "No microservices found under apps/* (missing package.json)."
-  exit 1
-fi
-
-echo "Starting microservices:"
-printf ' - %s\n' "${SERVICES[@]}"
-echo
-
 pids=()
 
 cleanup() {
   echo
-  echo "Stopping microservices..."
+  echo "Stopping services..."
   for pid in "${pids[@]:-}"; do
     kill "$pid" 2>/dev/null || true
   done
   wait 2>/dev/null || true
-  echo "Done."
 }
 
 trap cleanup INT TERM EXIT
 
 for svc in "${SERVICES[@]}"; do
-  echo ">>> Starting $svc"
-  # Run te script
+  echo "▶ Starting $(basename "$svc")"
   npm -w "$svc" run dev &
   pids+=("$!")
 done
 
-echo
-echo "All microservices started."
-echo "Press Ctrl+C to stop."
-echo
-
-# Wait for all services
 wait
