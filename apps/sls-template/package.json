@@ -4,12 +4,14 @@
   "private": true,
   "main": "dist/lambda.js",
   "scripts": {
+    "predev": "npm -w @ms/auth run build",
     "dev": "nodemon",
     "dev:once": "dotenv -e .env.local -- serverless offline --stage dev",
     "deploy:prod": "dotenv -e .env.prod -- serverless deploy --stage prod",
     "deploy:dev": "serverless deploy --stage dev"
   },
   "dependencies": {
+    "@ms/auth": "^1.0.1",
     "@nestjs/common": "^11.1.11",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.11",

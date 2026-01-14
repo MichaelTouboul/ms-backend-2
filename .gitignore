@@ -3,6 +3,7 @@ node_modules
 .env.prod
 
 # compiled output
+dist
 /dist
 /node_modules
 /build
@@ -32,6 +33,8 @@ npm-debug.log*
 # serverless
 .serverless
 **/.serverless
+
+*.tsbuildinfo
 
 
 

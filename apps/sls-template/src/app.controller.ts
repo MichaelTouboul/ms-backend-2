@@ -1,10 +1,20 @@
-import { Body, Controller, Get, Inject, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Logger,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 
 import { AppService } from './app.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { CognitoAuthGuard, Public } from '@ms/auth';
 
 @Controller()
+@UseGuards(CognitoAuthGuard)
 export class AppController {
   private readonly logger = new Logger(AppController.name);
   constructor(
@@ -12,6 +22,7 @@ export class AppController {
     @Inject(AppService) private readonly appService: AppService,
   ) {}
 
+  @Public()
   @Get('health')
   health() {
     try {

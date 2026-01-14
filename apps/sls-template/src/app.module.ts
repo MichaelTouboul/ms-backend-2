@@ -3,6 +3,7 @@ import { Template, TemplateSchema } from './schema/template.schema';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from '@ms/auth';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
@@ -10,6 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['apps/sls-template/.env.dev', '.env.dev', '.env'],
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
@@ -29,6 +31,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forFeature([
       { name: Template.name, schema: TemplateSchema },
     ]),
+    AuthModule.forRootAsync(),
   ],
   controllers: [AppController],
   providers: [AppService],
