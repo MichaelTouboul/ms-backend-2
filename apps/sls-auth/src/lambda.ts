@@ -20,10 +20,11 @@ async function bootstrap(): Promise<Handler> {
   return serverlessExpress({ app: expressApp });
 }
 
-export const handler: Handler = async (event, context, callback) => {
+export const handler: Handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   if (!cachedHandler) {
     cachedHandler = await bootstrap();
   }
 
-  return cachedHandler(event, context, callback);
+  return cachedHandler(event, context, undefined as any);
 };

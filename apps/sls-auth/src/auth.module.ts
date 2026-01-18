@@ -1,11 +1,15 @@
 import { CognitoConfig, CognitoService } from './cognito.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Session, SessionSchema } from './schema/sessions.schema';
 import { User, UserSchema } from './schema/user.schema';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { GoogleAuthService } from './google-auth.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { OAuth2Client } from 'google-auth-library';
+import { RedisModule } from '@ms/redis';
 
 @Module({
   imports: [
@@ -29,10 +33,22 @@ import { MongooseModule } from '@nestjs/mongoose';
       },
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Session.name, schema: SessionSchema }]),
+    RedisModule.forRootAsync(),
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
+    {
+      provide: 'JWT_SECRET',
+      inject: [ConfigService],
+      useFactory: (config: ConfigService): string => {
+        const jwtSecret = config.get<string>('JWT_ACCESS_SECRET');
+        if (!jwtSecret) throw new Error('JWT_ACCESS_SECRET is not defined');
+
+        return jwtSecret;
+      },
+    },
     CognitoService,
     {
       provide: 'COGNITO_CONFIG',
@@ -47,6 +63,18 @@ import { MongooseModule } from '@nestjs/mongoose';
         if (!clientId) throw new Error('COGNITO_CLIENT_ID is not defined');
 
         return { region, userPoolId, clientId };
+      },
+    },
+    GoogleAuthService,
+    {
+      provide: 'GOOGLE_CLIENT',
+      inject: [ConfigService],
+      useFactory: (config: ConfigService): OAuth2Client => {
+        const googleClientId = config.get<string>('GOOGLE_CLIENT_ID');
+        if (!googleClientId) throw new Error('GOOGLE_CLIENT_ID is not defined');
+        const googleClient = new OAuth2Client(googleClientId);
+
+        return googleClient;
       },
     },
   ],

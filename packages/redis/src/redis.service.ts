@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
+import { REDIS_CLIENT } from './const';
 
 @Injectable()
 export class RedisService {
-  constructor(@Inject('REDIS_CLIENT') private readonly client: Redis) {}
+  constructor(@Inject(REDIS_CLIENT) private readonly client: Redis) {}
 
   async ping(): Promise<string> {
     return this.client.ping();

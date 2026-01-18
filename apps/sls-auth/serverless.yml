@@ -8,6 +8,8 @@ provider:
   timeout: 29
   environment:
     MONGODB_URI: ${env:MONGODB_URI}
+    REDIS_HOST: ${env:REDIS_HOST}
+    REDIS_PORT: ${env:REDIS_PORT}
 
 plugins:
   - serverless-offline
@@ -39,6 +41,7 @@ build:
     platform: node
     target: node20
     external:
+      - '@ms-redis'
       - aws-sdk
       - '@nestjs/microservices'
       - '@nestjs/microservices/microservices-module'

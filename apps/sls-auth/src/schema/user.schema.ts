@@ -1,12 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export enum Role {
-  GUEST = 'guest',
-  ADMIN = 'admin',
-  SUPER_ADMIN = 'super_admin',
-  MANAGER_ADMIN = 'manager_admin',
-  DEV = 'dev',
-}
+import { Role } from '../lib/enums/role.enum';
 
 @Schema({ timestamps: true, collection: 'users' })
 export class User {
@@ -52,6 +46,3 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.index({ userId: 1 });
-UserSchema.index({ email: 1 });
