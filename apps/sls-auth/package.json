@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.968.0",
+    "@ms/redis": "^1.0.0",
     "@nestjs/common": "^11.1.11",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.11",
